@@ -1,0 +1,21 @@
+.scrollBar {
+  height: 65vh;
+}
+
+.scrollBar::-webkit-scrollbar {
+  width: 0.1rem;
+  height: 0;
+}
+
+.scrollBar::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.scrollBar::-webkit-scrollbar-corner {
+  width: 0;
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background-color: rgba(1, 230, 255, 0.932);
+  outline: 1px solid rgba(1, 230, 255, 0.932);
+}

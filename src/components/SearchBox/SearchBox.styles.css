@@ -1,0 +1,20 @@
+input {
+  transition: transform 0.2s;
+  transform: perspective(1px) translateZ(0);
+  backface-visibility: hidden;
+  background: #26d0ce;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+  box-shadow: 0 0 1px 1px rgb(0 0 0 / 10%);
+}
+
+input::placeholder {
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+input:focus-visible {
+  outline: none;
+  transform: scale(1.04);
+}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox/SearchBox';
@@ -8,54 +8,43 @@ import Scroll from '../components/Scroll/Scroll';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ErrorPage from '../components/ErrorPage';
 
-export default class App extends Component {
-  constructor() {
-    super();
+export default function App() {
+  const [robots, setRobots] = useState([]);
+  const [searchField, setSearchField] = useState('');
+  const [failedToFetch, setFailedToFetch] = useState(false);
 
-    this.state = {
-      robots: [],
-      searchField: '',
-      failedToFetch: false,
-    };
-  }
-
-  onSearchChange = (event) => {
-    this.setState({ searchField: event.target.value });
+  const onSearchChange = (event) => {
+    setSearchField(event.target.value);
   };
 
-  componentDidMount() {
+  useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
-      .then((users) => this.setState({ robots: users }))
-      .catch(() => this.setState({ failedToFetch: true }));
-  }
+      .then((users) => setRobots(users))
+      .catch(() => setFailedToFetch(true));
+  }, []);
 
-  render() {
-    const { robots, searchField, failedToFetch } = this.state;
-    const filteredRobots = robots.length
-      ? robots.filter((robot) =>
-          robot.name
-            .toLocaleLowerCase()
-            .includes(searchField.toLocaleLowerCase())
-        )
-      : [];
+  const filteredRobots = robots.length
+    ? robots.filter((robot) =>
+        robot.name.toLocaleLowerCase().includes(searchField.toLocaleLowerCase())
+      )
+    : [];
 
-    if (!robots.length && !failedToFetch) {
-      return <Loading />;
-    } else if (failedToFetch) {
-      return <ErrorPage />;
-    } else {
-      return (
-        <div className="tc">
-          <Header />
-          <SearchBox SearchChange={this.onSearchChange} />
-          <Scroll>
-            <ErrorBoundary>
-              <CardList robots={filteredRobots} />
-            </ErrorBoundary>
-          </Scroll>
-        </div>
-      );
-    }
+  if (!robots.length && !failedToFetch) {
+    return <Loading />;
+  } else if (failedToFetch) {
+    return <ErrorPage />;
+  } else {
+    return (
+      <div className="tc">
+        <Header />
+        <SearchBox SearchChange={onSearchChange} />
+        <Scroll>
+          <ErrorBoundary>
+            <CardList robots={filteredRobots} />
+          </ErrorBoundary>
+        </Scroll>
+      </div>
+    );
   }
 }
